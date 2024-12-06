@@ -21,6 +21,7 @@ public class FavoritosController {
         }
 
         // Convertir AddFavoritosRequest a Libro
+        // Esto es un comentario de pruenba para probar git
         Libro libro = new Libro();
         libro.setId(request.getId());
         libro.setTitulo(request.getTitulo());
