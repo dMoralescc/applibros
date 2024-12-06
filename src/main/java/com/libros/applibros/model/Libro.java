@@ -11,6 +11,7 @@ public class Libro {
     @Id
     private String id; // ID del libro (clave primaria)
 
+    private String isbn;
     private String titulo;
     private String subtitulo;
 
@@ -106,4 +107,13 @@ public class Libro {
     public void setImagenPortada(String imagenPortada) {
         this.imagenPortada = imagenPortada;
     }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+    
 }

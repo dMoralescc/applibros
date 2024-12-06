@@ -3,6 +3,7 @@ package com.libros.applibros.service;
 import org.springframework.stereotype.Service;
 
 import com.libros.applibros.model.Libro;
+import com.libros.applibros.model.LibroFav;
 import com.libros.applibros.repository.FavoritosRepository;
 
 @Service
@@ -13,7 +14,9 @@ public class FavoritosService {
         this.favoritosRepository = favoritosRepository;
     }
 
-    public void agregarFavorito(Libro libro) {
-        favoritosRepository.save(libro); // Reutiliza esta lógica
+    public void agregarFavorito(LibroFav libro) {
+        // LibroFav librofav = new LibroFav(libro.getIsbn(), libro);
+
+        favoritosRepository.save(libro);
     }
 }

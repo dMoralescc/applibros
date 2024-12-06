@@ -1,7 +1,14 @@
 package com.libros.applibros.controller;
 import com.libros.applibros.model.Libro;
+import com.libros.applibros.model.LibroFav;
+import com.libros.applibros.model.Usuario;
 import com.libros.applibros.request.AddFavoritosRequest;
 import com.libros.applibros.service.FavoritosService;
+
+import jakarta.servlet.http.HttpSession;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,26 +22,32 @@ public class FavoritosController {
     }
 
     @PostMapping("/addFavoritos")
-    public ResponseEntity<String> agregarFavorito(@RequestBody AddFavoritosRequest request) {
+    public ResponseEntity<String> agregarFavorito(
+         HttpSession session,
+         @RequestBody AddFavoritosRequest request) {
+
+         Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null) {
+            return ResponseEntity.status(401).body("Debes iniciar sesión para realizar esta acción");
+        }
+
+
         if (request.getId() == null || request.getId().isEmpty()) {
             return ResponseEntity.badRequest().body("El campo 'id' es obligatorio.");
         }
 
-        // Convertir AddFavoritosRequest a Libro
-        // Esto es un comentario de pruenba para probar git
-        Libro libro = new Libro();
-        libro.setId(request.getId());
-        libro.setTitulo(request.getTitulo());
-        libro.setSubtitulo(request.getSubtitulo());
-        libro.setAutores(request.getAutores());
-        libro.setEditorial(request.getEditorial());
-        libro.setFechaPublicacion(request.getFechaPublicacion());
-        libro.setDescripcion(request.getDescripcion());
-        libro.setCategorias(request.getCategorias());
-        libro.setPuntuacion(request.getPuntuacion());
-        libro.setImagenPortada(request.getImagenPortada());
+        String fechaFav = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-        favoritosService.agregarFavorito(libro);
+        // Convertir AddFavoritosRequest a Libro
+        LibroFav librofav = new LibroFav();
+        librofav.setId(request.getId());
+        librofav.setIsbn(request.getIsbn());
+        librofav.setIdusuario(usuario.getId_usr());
+        librofav.setFechafav(fechaFav);
+        librofav.setEstado(0);
+
+
+        favoritosService.agregarFavorito(librofav);
         return ResponseEntity.ok("Libro marcado como favorito exitosamente.");
     }
 }
